@@ -3,819 +3,323 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalkulator Saldo — Demon Slayer</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+
+<title>DOCT Dashboard Calculator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-  :root {
-    --neon-red: #ff2244;
-    --neon-blue: #00cfff;
-    --neon-purple: #bf00ff;
-    --neon-gold: #ffcc00;
-    --neon-green: #00ff99;
-    --dark-bg: #05020f;
-    --card-bg: rgba(10, 5, 25, 0.85);
-  }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
 
-  body {
-    background: var(--dark-bg);
-    font-family: 'Rajdhani', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-    cursor: crosshair;
-  }
+body{
+    background:#0f172a;
+    color:white;
+    padding:25px;
+}
 
-  /* === BACKGROUND PARTICLES === */
-  .bg-canvas {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    display: block;
-  }
+.dashboard{
+    max-width:1200px;
+    margin:auto;
+}
 
-  /* === FLOATING FLAME PARTICLES === */
-  .particle {
-    position: fixed;
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 1;
-    animation: floatUp linear infinite;
-  }
+.header{
+    margin-bottom:25px;
+}
 
-  @keyframes floatUp {
-    0%   { transform: translateY(100vh) translateX(0) scale(1); opacity: 1; }
-    50%  { transform: translateY(50vh) translateX(30px) scale(0.8); opacity: 0.7; }
-    100% { transform: translateY(-10vh) translateX(-20px) scale(0.3); opacity: 0; }
-  }
+.header h1{
+    font-size:32px;
+    font-weight:700;
+}
 
-  /* === BREATHING LINES (water effect) === */
-  .water-line {
-    position: fixed;
-    height: 2px;
-    width: 200px;
-    border-radius: 999px;
-    pointer-events: none;
-    z-index: 1;
-    animation: waterFlow ease-in-out infinite;
-    opacity: 0;
-  }
+.header p{
+    color:#94a3b8;
+    margin-top:5px;
+}
 
-  @keyframes waterFlow {
-    0%   { transform: translateX(-300px) skewX(-15deg); opacity: 0; width: 80px; }
-    30%  { opacity: 0.8; width: 220px; }
-    70%  { opacity: 0.6; width: 300px; }
-    100% { transform: translateX(110vw) skewX(-15deg); opacity: 0; width: 80px; }
-  }
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:20px;
+}
 
-  /* === TANJIRO BREATHING ORBS === */
-  .orb {
-    position: fixed;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 1;
-    animation: orbPulse ease-in-out infinite;
-  }
+.card{
+    background:#1e293b;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 0 15px rgba(0,0,0,0.3);
+}
 
-  @keyframes orbPulse {
-    0%, 100% { transform: scale(1); opacity: 0.15; }
-    50% { transform: scale(1.4); opacity: 0.4; }
-  }
+.card h2{
+    font-size:20px;
+    margin-bottom:20px;
+    color:#38bdf8;
+}
 
-  /* === SLASH EFFECT === */
-  .slash {
-    position: fixed;
-    width: 3px;
-    border-radius: 999px;
-    pointer-events: none;
-    z-index: 2;
-    transform-origin: top center;
-    animation: slashFade ease-out forwards;
-    opacity: 0;
-  }
+.input-group{
+    margin-bottom:18px;
+}
 
-  @keyframes slashFade {
-    0%   { opacity: 1; transform: scaleY(0) rotate(var(--angle)); }
-    30%  { opacity: 1; transform: scaleY(1) rotate(var(--angle)); }
-    100% { opacity: 0; transform: scaleY(1) rotate(var(--angle)) translateY(20px); }
-  }
+.input-group label{
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+    color:#cbd5e1;
+}
 
-  /* === HEADER === */
-  .header {
-    position: relative;
-    z-index: 100;
-    text-align: center;
-    padding: 2.5rem 1rem 1rem;
-  }
+.input-group input{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    background:#334155;
+    color:white;
+    font-size:16px;
+}
 
-  .header-title {
-    font-family: 'Cinzel Decorative', cursive;
-    font-size: clamp(18px, 4vw, 36px);
-    letter-spacing: 4px;
-    color: #fff;
-    animation: flickerRed 4s ease-in-out infinite;
-    text-shadow:
-      0 0 8px var(--neon-red),
-      0 0 20px var(--neon-red),
-      0 0 40px var(--neon-red),
-      0 0 80px rgba(255,34,68,0.5);
-  }
+.input-group input:focus{
+    outline:none;
+    border:2px solid #38bdf8;
+}
 
-  .header-sub {
-    font-family: 'Cinzel Decorative', cursive;
-    font-size: clamp(10px, 2vw, 14px);
-    letter-spacing: 8px;
-    margin-top: 6px;
-    color: var(--neon-blue);
-    animation: flickerBlue 3s ease-in-out infinite;
-    text-shadow:
-      0 0 6px var(--neon-blue),
-      0 0 20px var(--neon-blue),
-      0 0 40px var(--neon-blue);
-  }
+.result-box{
+    margin-top:20px;
+    padding:20px;
+    border-radius:15px;
+    background:#0f172a;
+    text-align:center;
+}
 
-  /* === DIVIDER === */
-  .neon-divider {
-    width: 80%;
-    max-width: 600px;
-    height: 2px;
-    margin: 1rem auto;
-    background: linear-gradient(90deg, transparent, var(--neon-red), var(--neon-blue), transparent);
-    animation: dividerGlow 2s ease-in-out infinite;
-  }
+.result-box h3{
+    color:#94a3b8;
+    font-size:15px;
+    margin-bottom:10px;
+}
 
-  @keyframes dividerGlow {
-    0%, 100% { box-shadow: 0 0 8px var(--neon-red), 0 0 20px var(--neon-red); }
-    50% { box-shadow: 0 0 8px var(--neon-blue), 0 0 20px var(--neon-blue); }
-  }
+.result{
+    font-size:30px;
+    font-weight:700;
+    color:#22c55e;
+}
 
-  /* === CONTAINER === */
-  .container {
-    position: relative;
-    z-index: 100;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 1.5rem 3rem;
-  }
+.table-box{
+    overflow-x:auto;
+}
 
-  /* === INPUT GRID === */
-  .input-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 14px;
-    margin-bottom: 1.5rem;
-    position: relative;
-    z-index: 100;
-  }
+table{
+    width:100%;
+    border-collapse:collapse;
+}
 
-  .input-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 1rem 1.2rem;
-    border: 1px solid rgba(255,34,68,0.3);
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    z-index: 100;
-  }
+table th{
+    background:#0f172a;
+    padding:14px;
+    color:#38bdf8;
+}
 
-  .input-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 12px;
-    padding: 1px;
-    background: linear-gradient(135deg, var(--neon-red), transparent, var(--neon-blue));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    animation: borderRotate 4s linear infinite;
-    opacity: 0.5;
-  }
+table td{
+    padding:14px;
+    border-bottom:1px solid #334155;
+}
 
-  @keyframes borderRotate {
-    0%   { background: linear-gradient(0deg, var(--neon-red), transparent, var(--neon-blue)); }
-    50%  { background: linear-gradient(180deg, var(--neon-blue), transparent, var(--neon-red)); }
-    100% { background: linear-gradient(360deg, var(--neon-red), transparent, var(--neon-blue)); }
-  }
+.badge{
+    background:#22c55e;
+    color:white;
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:12px;
+}
 
-  .input-card:focus-within {
-    border-color: var(--neon-red);
-    box-shadow: 0 0 12px rgba(255,34,68,0.4), 0 0 30px rgba(255,34,68,0.15), inset 0 0 20px rgba(255,34,68,0.05);
-  }
+@media(max-width:768px){
 
-  .input-card.blue:focus-within {
-    border-color: var(--neon-blue);
-    box-shadow: 0 0 12px rgba(0,207,255,0.4), 0 0 30px rgba(0,207,255,0.15), inset 0 0 20px rgba(0,207,255,0.05);
-  }
+.header h1{
+    font-size:24px;
+}
 
-  .card-label {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--neon-red);
-    display: block;
-    margin-bottom: 8px;
-    animation: flickerRed 5s ease-in-out infinite;
-    text-shadow: 0 0 8px var(--neon-red);
-  }
+.result{
+    font-size:24px;
+}
 
-  .blue .card-label {
-    color: var(--neon-blue);
-    animation: flickerBlue 4s ease-in-out infinite;
-    text-shadow: 0 0 8px var(--neon-blue);
-  }
+}
 
-  .card-icon {
-    font-size: 18px;
-    margin-right: 6px;
-    vertical-align: -3px;
-  }
-
-  .card-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    color: #fff;
-    letter-spacing: 1px;
-    position: relative;
-    z-index: 101;
-    cursor: text;
-  }
-
-  .card-input::placeholder { color: rgba(255,255,255,0.2); }
-
-  /* === RESULT CARDS === */
-  .result-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 1.5rem;
-    position: relative;
-    z-index: 100;
-  }
-
-  .result-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 1.25rem;
-    text-align: center;
-    border: 1px solid rgba(255,204,0,0.3);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .result-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--neon-gold);
-    animation: scanLine 2s linear infinite;
-    box-shadow: 0 0 10px var(--neon-gold), 0 0 20px var(--neon-gold);
-  }
-
-  .result-card.selisih-card::after {
-    background: var(--neon-green);
-    box-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
-  }
-
-  @keyframes scanLine {
-    0%   { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
-
-  .result-label {
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--neon-gold);
-    text-shadow: 0 0 10px var(--neon-gold);
-    animation: flickerGold 3.5s ease-in-out infinite;
-    margin-bottom: 10px;
-  }
-
-  .selisih-card .result-label {
-    color: var(--neon-green);
-    text-shadow: 0 0 10px var(--neon-green);
-    animation: flickerGreen 3s ease-in-out infinite;
-  }
-
-  .result-value {
-    font-family: 'Cinzel Decorative', cursive;
-    font-size: clamp(16px, 3vw, 24px);
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 0 0 10px var(--neon-gold), 0 0 25px rgba(255,204,0,0.4);
-    letter-spacing: 2px;
-    min-height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .selisih-card .result-value {
-    text-shadow: 0 0 10px var(--neon-green), 0 0 25px rgba(0,255,153,0.4);
-  }
-
-  .result-sub {
-    font-size: 10px;
-    color: rgba(255,255,255,0.3);
-    letter-spacing: 1px;
-    margin-top: 8px;
-    text-transform: uppercase;
-  }
-
-  /* === FORMULA BAR === */
-  .formula-bar {
-    background: rgba(0,207,255,0.05);
-    border: 1px solid rgba(0,207,255,0.2);
-    border-radius: 8px;
-    padding: 0.75rem 1.25rem;
-    font-size: 12px;
-    color: rgba(0,207,255,0.7);
-    letter-spacing: 1px;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-family: 'Rajdhani', monospace;
-  }
-
-  /* === RESET BUTTON === */
-  .reset-btn {
-    display: block;
-    margin: 0 auto;
-    background: transparent;
-    border: 1px solid var(--neon-red);
-    color: var(--neon-red);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    padding: 10px 32px;
-    border-radius: 6px;
-    cursor: pointer;
-    animation: flickerRed 4s ease-in-out infinite;
-    box-shadow: 0 0 10px rgba(255,34,68,0.3), inset 0 0 10px rgba(255,34,68,0.05);
-    transition: all 0.2s;
-  }
-
-  .reset-btn:hover {
-    background: rgba(255,34,68,0.15);
-    box-shadow: 0 0 25px rgba(255,34,68,0.6), inset 0 0 20px rgba(255,34,68,0.1);
-    transform: scale(1.03);
-  }
-
-  /* === NEON FLICKER KEYFRAMES === */
-  @keyframes flickerRed {
-    0%, 18%, 22%, 25%, 53%, 57%, 100% {
-      text-shadow: 0 0 6px var(--neon-red), 0 0 20px var(--neon-red), 0 0 40px var(--neon-red);
-      opacity: 1;
-    }
-    20%, 24%, 55% { opacity: 0.6; text-shadow: none; }
-  }
-
-  @keyframes flickerBlue {
-    0%, 19%, 21%, 23%, 54%, 58%, 100% {
-      text-shadow: 0 0 6px var(--neon-blue), 0 0 20px var(--neon-blue), 0 0 40px var(--neon-blue);
-      opacity: 1;
-    }
-    20%, 22%, 56% { opacity: 0.5; text-shadow: none; }
-  }
-
-  @keyframes flickerGold {
-    0%, 95%, 100% { opacity: 1; }
-    96% { opacity: 0.5; }
-    97% { opacity: 1; }
-  }
-
-  @keyframes flickerGreen {
-    0%, 89%, 100% { opacity: 1; }
-    90%, 92% { opacity: 0.4; }
-    91% { opacity: 1; }
-  }
-
-  /* === DEMON EYE BADGE === */
-  .demon-badge {
-    position: fixed;
-    top: 16px; right: 16px;
-    z-index: 20;
-    width: 48px; height: 48px;
-  }
-
-  .demon-badge svg { width: 100%; height: 100%; }
-
-  /* === SWORD DECORATION === */
-  .sword-left, .sword-right {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-    opacity: 0.08;
-    pointer-events: none;
-    font-size: 120px;
-    animation: swordGlow 3s ease-in-out infinite;
-  }
-
-  .sword-left { left: -20px; }
-  .sword-right { right: -20px; transform: translateY(-50%) scaleX(-1); }
-
-  @keyframes swordGlow {
-    0%, 100% { opacity: 0.06; filter: drop-shadow(0 0 10px var(--neon-red)); }
-    50% { opacity: 0.12; filter: drop-shadow(0 0 20px var(--neon-blue)); }
-  }
-
-  /* === CORNER MARKS === */
-  .corner {
-    position: fixed;
-    width: 40px; height: 40px;
-    z-index: 5;
-    pointer-events: none;
-  }
-
-  .corner-tl { top: 12px; left: 12px; border-top: 2px solid var(--neon-red); border-left: 2px solid var(--neon-red); animation: flickerRed 3s infinite; }
-  .corner-tr { top: 12px; right: 12px; border-top: 2px solid var(--neon-blue); border-right: 2px solid var(--neon-blue); animation: flickerBlue 3.5s infinite; }
-  .corner-bl { bottom: 12px; left: 12px; border-bottom: 2px solid var(--neon-red); border-left: 2px solid var(--neon-red); animation: flickerRed 4s infinite; }
-  .corner-br { bottom: 12px; right: 12px; border-bottom: 2px solid var(--neon-blue); border-right: 2px solid var(--neon-blue); animation: flickerBlue 2.5s infinite; }
-
-  /* === BREATHING STYLE TEXT === */
-  .breathing-text {
-    text-align: center;
-    font-size: 11px;
-    letter-spacing: 4px;
-    color: rgba(0,207,255,0.5);
-    margin-bottom: 2rem;
-    text-transform: uppercase;
-    animation: breathe 4s ease-in-out infinite;
-  }
-
-  @keyframes breathe {
-    0%, 100% { opacity: 0.4; letter-spacing: 4px; }
-    50% { opacity: 1; letter-spacing: 6px; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
-  }
-
-  /* === SELISIH COLORS === */
-  .positive { color: var(--neon-green) !important; text-shadow: 0 0 10px var(--neon-green), 0 0 25px rgba(0,255,153,0.4) !important; }
-  .negative { color: #ff4466 !important; text-shadow: 0 0 10px #ff4466, 0 0 25px rgba(255,68,102,0.4) !important; }
-  .neutral  { color: rgba(255,255,255,0.4) !important; }
-
-  /* === CANVAS STARS === */
-  canvas { display: block; }
-
-  @media (max-width: 600px) {
-    .result-grid { grid-template-columns: 1fr; }
-    .sword-left, .sword-right { display: none; }
-  }
 </style>
 </head>
+
 <body>
 
-<!-- Corner decorations -->
-<div class="corner corner-tl"></div>
-<div class="corner corner-tr"></div>
-<div class="corner corner-bl"></div>
-<div class="corner corner-br"></div>
+<div class="dashboard">
 
-<!-- Sword decorations -->
-<div class="sword-left">⚔</div>
-<div class="sword-right">⚔</div>
-
-<!-- Background canvas for stars/ember -->
-<canvas class="bg-canvas" id="bgCanvas"></canvas>
-
-<!-- Demon eye badge -->
-<div class="demon-badge">
-  <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="24" cy="24" rx="20" ry="12" fill="none" stroke="#ff2244" stroke-width="1.5" style="filter:drop-shadow(0 0 6px #ff2244)"/>
-    <ellipse cx="24" cy="24" rx="8" ry="11" fill="#ff2244" style="filter:drop-shadow(0 0 8px #ff2244)">
-      <animate attributeName="ry" values="11;9;11" dur="2s" repeatCount="indefinite"/>
-    </ellipse>
-    <ellipse cx="24" cy="24" rx="3" ry="5" fill="#1a0005">
-      <animate attributeName="ry" values="5;4;5" dur="2s" repeatCount="indefinite"/>
-    </ellipse>
-    <line x1="4" y1="24" x2="20" y2="24" stroke="#ff2244" stroke-width="1" opacity="0.6"/>
-    <line x1="28" y1="24" x2="44" y2="24" stroke="#ff2244" stroke-width="1" opacity="0.6"/>
-  </svg>
-</div>
-
-<!-- Header -->
-<div class="header">
-  <div class="header-title">鬼滅の刃 · KALKULATOR SALDO</div>
-  <div class="header-sub">DEMON SLAYER · BREATHING CALCULATOR</div>
-  <div class="neon-divider"></div>
-</div>
-
-<div class="container">
-  <div class="breathing-text">⸻ Hinapki no Kata · First Form: Total Concentration ⸻</div>
-
-  <!-- Formula bar -->
-  <div class="formula-bar">
-    ✦ CO + Daily Fee + Approved Kemarin + Approved Hari Ini + Unsettle = HASIL ✦
-  </div>
-
-  <!-- Input grid -->
-  <div class="input-grid">
-    <div class="input-card">
-      <label class="card-label"><span class="card-icon">🌊</span>Cut Off</label>
-      <input class="card-input" id="cutoff" type="text" placeholder="0" autocomplete="off" />
+    <div class="header">
+        <h1>🔥 DOCT Dashboard Calculator</h1>
+        <p>Monitoring saldo & kalkulasi otomatis</p>
     </div>
-    <div class="input-card">
-      <label class="card-label"><span class="card-icon">🔥</span>Daily Fee</label>
-      <input class="card-input" id="dailyfee" type="text" placeholder="0" autocomplete="off" />
-    </div>
-    <div class="input-card">
-      <label class="card-label"><span class="card-icon">⚔</span>Approved Kemarin</label>
-      <input class="card-input" id="appkemarin" type="text" placeholder="0" autocomplete="off" />
-    </div>
-    <div class="input-card">
-      <label class="card-label"><span class="card-icon">🗡</span>Approved Hari Ini</label>
-      <input class="card-input" id="apphari" type="text" placeholder="0" autocomplete="off" />
-    </div>
-    <div class="input-card">
-      <label class="card-label"><span class="card-icon">💠</span>Unsettle</label>
-      <input class="card-input" id="unsettle" type="text" placeholder="0" autocomplete="off" />
-    </div>
-    <div class="input-card blue">
-      <label class="card-label"><span class="card-icon">💎</span>Tempel Saldo</label>
-      <input class="card-input" id="saldo" type="text" placeholder="0" autocomplete="off" />
-    </div>
-  </div>
 
-  <!-- Results -->
-  <div class="result-grid">
-    <div class="result-card">
-      <div class="result-label">⸻ Total Hasil ⸻</div>
-      <div class="result-value" id="hasil">—</div>
-      <div class="result-sub">sum of all components</div>
-    </div>
-    <div class="result-card selisih-card">
-      <div class="result-label">⸻ Selisih ⸻</div>
-      <div class="result-value neutral" id="selisih">—</div>
-      <div class="result-sub">saldo minus hasil</div>
-    </div>
-  </div>
+    <div class="grid">
 
-  <button class="reset-btn" onclick="resetAll()">⚡ RESET SEMUA ⚡</button>
+        <!-- CARD INPUT -->
+        <div class="card">
+
+            <h2>Kalkulasi Saldo DOCT</h2>
+
+            <div class="input-group">
+                <label>Total Saldo DOCT</label>
+                <input type="number" id="totalSaldo" value="0">
+            </div>
+
+            <div class="input-group">
+                <label>Cut Off</label>
+                <input type="number" id="cutoff" value="0">
+            </div>
+
+            <div class="input-group">
+                <label>Daylee Fee</label>
+                <input type="number" id="daylee" value="0">
+            </div>
+
+            <div class="input-group">
+                <label>Approved Tanggal Semalam</label>
+                <input type="number" id="approvedSemalam" value="0">
+            </div>
+
+            <div class="input-group">
+                <label>Approved Hari Ini</label>
+                <input type="number" id="approvedHariIni" value="0">
+            </div>
+
+            <div class="input-group">
+                <label>Unsettle</label>
+                <input type="number" id="unsettle" value="0">
+            </div>
+
+            <div class="result-box">
+                <h3>HASIL AKHIR</h3>
+                <div class="result" id="hasil">
+                    Rp 0
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CARD TABLE -->
+        <div class="card">
+
+            <h2>Keterangan Saldo</h2>
+
+            <div class="table-box">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Keterangan</th>
+                            <th>Nominal</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Total Saldo DOCT</td>
+                            <td id="tbSaldo">Rp 0</td>
+                        </tr>
+
+                        <tr>
+                            <td>Cut Off</td>
+                            <td id="tbCutoff">Rp 0</td>
+                        </tr>
+
+                        <tr>
+                            <td>Daylee Fee</td>
+                            <td id="tbDaylee">Rp 0</td>
+                        </tr>
+
+                        <tr>
+                            <td>Approved Semalam</td>
+                            <td id="tbSemalam">Rp 0</td>
+                        </tr>
+
+                        <tr>
+                            <td>Approved Hari Ini</td>
+                            <td id="tbHariIni">Rp 0</td>
+                        </tr>
+
+                        <tr>
+                            <td>Unsettle</td>
+                            <td id="tbUnsettle">Rp 0</td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Hasil Akhir</strong></td>
+                            <td>
+                                <span class="badge" id="tbHasil">
+                                    Rp 0
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 <script>
-// === BACKGROUND CANVAS: stars + embers ===
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas.getContext('2d');
-let W, H, stars = [], embers = [];
 
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
+const inputs = document.querySelectorAll("input");
 
-function initStars() {
-  stars = [];
-  for (let i = 0; i < 120; i++) {
-    stars.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 1.5 + 0.3,
-      a: Math.random(),
-      da: (Math.random() - 0.5) * 0.005,
-      color: Math.random() > 0.7 ? '#00cfff' : Math.random() > 0.5 ? '#ff2244' : '#ffffff'
-    });
-  }
-}
-
-function initEmbers() {
-  embers = [];
-  for (let i = 0; i < 40; i++) {
-    embers.push(newEmber());
-  }
-}
-
-function newEmber() {
-  return {
-    x: Math.random() * W,
-    y: H + Math.random() * 100,
-    r: Math.random() * 3 + 1,
-    vx: (Math.random() - 0.5) * 1.5,
-    vy: -(Math.random() * 2 + 0.8),
-    a: Math.random(),
-    color: Math.random() > 0.5 ? '#ff4422' : '#ffaa00',
-    life: 0,
-    maxLife: Math.random() * 200 + 100
-  };
-}
-
-function drawFrame() {
-  ctx.clearRect(0, 0, W, H);
-
-  // stars
-  for (let s of stars) {
-    s.a += s.da;
-    if (s.a < 0.1) s.da = Math.abs(s.da);
-    if (s.a > 1)   s.da = -Math.abs(s.da);
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-    ctx.fillStyle = s.color;
-    ctx.globalAlpha = s.a;
-    ctx.fill();
-    // glow
-    ctx.shadowBlur = 6;
-    ctx.shadowColor = s.color;
-    ctx.fill();
-    ctx.shadowBlur = 0;
-  }
-
-  // embers
-  ctx.globalAlpha = 1;
-  for (let i = 0; i < embers.length; i++) {
-    let e = embers[i];
-    e.x += e.vx;
-    e.y += e.vy;
-    e.life++;
-    e.vx += (Math.random() - 0.5) * 0.1;
-    let progress = e.life / e.maxLife;
-    let alpha = progress < 0.2 ? progress / 0.2 : 1 - (progress - 0.2) / 0.8;
-    ctx.beginPath();
-    ctx.arc(e.x, e.y, e.r * (1 - progress * 0.5), 0, Math.PI * 2);
-    ctx.fillStyle = e.color;
-    ctx.globalAlpha = Math.max(0, alpha * 0.7);
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = e.color;
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    if (e.life >= e.maxLife || e.y < -20) embers[i] = newEmber();
-  }
-
-  ctx.globalAlpha = 1;
-  requestAnimationFrame(drawFrame);
-}
-
-resize();
-initStars();
-initEmbers();
-drawFrame();
-window.addEventListener('resize', () => { resize(); initStars(); });
-
-// === WATER LINES (Tanjiro Water Breathing) ===
-function spawnWaterLine() {
-  const line = document.createElement('div');
-  line.className = 'water-line';
-  const colors = ['#00cfff', '#0088ff', '#00eeff', '#bf00ff'];
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  const y = Math.random() * 100 + '%';
-  const dur = (Math.random() * 3 + 2).toFixed(1) + 's';
-  line.style.cssText = `top:${y}; background:${color}; box-shadow:0 0 8px ${color}, 0 0 20px ${color}; animation-duration:${dur}; animation-delay:0s;`;
-  document.body.appendChild(line);
-  setTimeout(() => line.remove(), parseFloat(dur) * 1000 + 500);
-}
-
-setInterval(spawnWaterLine, 800);
-
-// === SLASH EFFECTS (random) ===
-function spawnSlash() {
-  const slash = document.createElement('div');
-  slash.className = 'slash';
-  const x = Math.random() * 100 + 'vw';
-  const y = Math.random() * 100 + 'vh';
-  const angle = (Math.random() * 60 - 30) + 'deg';
-  const height = Math.random() * 80 + 40;
-  const color = Math.random() > 0.5 ? '#ff2244' : '#00cfff';
-  slash.style.cssText = `left:${x}; top:${y}; height:${height}px; background:${color}; box-shadow:0 0 8px ${color}, 0 0 20px ${color}; --angle:${angle}; animation-duration:0.8s;`;
-  document.body.appendChild(slash);
-  setTimeout(() => slash.remove(), 900);
-}
-
-setInterval(spawnSlash, 2500);
-
-// === FLOATING ORB (Nezuko pink) ===
-function spawnOrb() {
-  const orb = document.createElement('div');
-  orb.className = 'orb';
-  const size = Math.random() * 80 + 40;
-  const x = Math.random() * 90 + '%';
-  const y = Math.random() * 90 + '%';
-  const dur = (Math.random() * 4 + 3).toFixed(1) + 's';
-  const color = ['#ff2244', '#bf00ff', '#00cfff'][Math.floor(Math.random() * 3)];
-  orb.style.cssText = `left:${x}; top:${y}; width:${size}px; height:${size}px; background:radial-gradient(circle, ${color}22, transparent); animation-duration:${dur};`;
-  document.body.appendChild(orb);
-  setTimeout(() => orb.remove(), parseFloat(dur) * 3000);
-}
-
-setInterval(spawnOrb, 1500);
-
-// === CALCULATOR ===
-const FIELDS = ['cutoff','dailyfee','appkemarin','apphari','unsettle','saldo'];
-
-// Strip semua karakter non-digit kecuali minus
-function parse(val) {
-  if (!val || val.trim() === '') return 0;
-  // hapus titik (pemisah ribuan ID), hapus koma, hapus spasi, hapus karakter aneh
-  var clean = String(val)
-    .replace(/\s/g, '')
-    .replace(/\./g, '')
-    .replace(/,/g, '')
-    .replace(/[^0-9\-]/g, '');
-  var num = parseFloat(clean);
-  return isNaN(num) ? 0 : num;
-}
-
-function fmt(num) {
-  return Math.round(num).toLocaleString('id-ID');
-}
-
-function hitung() {
-  var co = parse(document.getElementById('cutoff').value);
-  var df = parse(document.getElementById('dailyfee').value);
-  var ak = parse(document.getElementById('appkemarin').value);
-  var ah = parse(document.getElementById('apphari').value);
-  var un = parse(document.getElementById('unsettle').value);
-  var sa = parse(document.getElementById('saldo').value);
-
-  var hasil = co + df + ak + ah + un;
-  var selisih = sa - hasil;
-
-  var hasilEl = document.getElementById('hasil');
-  var selisihEl = document.getElementById('selisih');
-
-  hasilEl.textContent = fmt(hasil);
-
-  if (document.getElementById('saldo').value.trim() !== '') {
-    selisihEl.textContent = (selisih >= 0 ? '+' : '') + fmt(selisih);
-    selisihEl.className = 'result-value ' + (selisih > 0 ? 'positive' : selisih < 0 ? 'negative' : 'neutral');
-    spawnSlash();
-  } else {
-    selisihEl.textContent = '—';
-    selisihEl.className = 'result-value neutral';
-  }
-}
-
-// Handle paste: ambil teks dari clipboard, bersihkan, masukkan ke field
-FIELDS.forEach(function(id) {
-  var el = document.getElementById(id);
-
-  el.addEventListener('paste', function(e) {
-    e.preventDefault();
-    var pasted = (e.clipboardData || window.clipboardData).getData('text');
-    // bersihkan: hapus titik, koma, spasi, karakter non-angka
-    var clean = String(pasted)
-      .replace(/\s/g, '')
-      .replace(/\./g, '')
-      .replace(/,/g, '')
-      .replace(/[^0-9\-]/g, '');
-    el.value = clean;
-    hitung();
-  });
-
-  el.addEventListener('input', function() {
-    hitung();
-  });
+inputs.forEach(input => {
+    input.addEventListener("input", hitungSaldo);
 });
 
-function resetAll() {
-  FIELDS.forEach(function(id) {
-    document.getElementById(id).value = '';
-  });
-  document.getElementById('hasil').textContent = '—';
-  var selisihEl = document.getElementById('selisih');
-  selisihEl.textContent = '—';
-  selisihEl.className = 'result-value neutral';
-  setTimeout(spawnSlash, 0);
-  setTimeout(spawnSlash, 150);
-  setTimeout(spawnSlash, 300);
+function formatRupiah(angka){
+    return "Rp " + Number(angka).toLocaleString("id-ID");
 }
 
-// === CLICK SPARK ===
-document.addEventListener('click', function(e) {
-  for (let i = 0; i < 5; i++) {
-    setTimeout(() => {
-      const spark = document.createElement('div');
-      const angle = Math.random() * 360;
-      const dist = Math.random() * 40 + 10;
-      const dx = Math.cos(angle * Math.PI / 180) * dist;
-      const dy = Math.sin(angle * Math.PI / 180) * dist;
-      spark.style.cssText = `
-        position:fixed; left:${e.clientX}px; top:${e.clientY}px;
-        width:4px; height:4px; border-radius:50%;
-        background:${Math.random()>0.5?'#ff2244':'#00cfff'};
-        box-shadow:0 0 6px currentColor;
-        pointer-events:none; z-index:999;
-        transition: transform 0.4s ease-out, opacity 0.4s ease-out;
-        opacity:1;
-      `;
-      document.body.appendChild(spark);
-      requestAnimationFrame(() => {
-        spark.style.transform = `translate(${dx}px, ${dy}px) scale(0)`;
-        spark.style.opacity = '0';
-      });
-      setTimeout(() => spark.remove(), 450);
-    }, i * 30);
-  }
-});
+function hitungSaldo(){
+
+    let totalSaldo = parseFloat(document.getElementById("totalSaldo").value) || 0;
+    let cutoff = parseFloat(document.getElementById("cutoff").value) || 0;
+    let daylee = parseFloat(document.getElementById("daylee").value) || 0;
+    let approvedSemalam = parseFloat(document.getElementById("approvedSemalam").value) || 0;
+    let approvedHariIni = parseFloat(document.getElementById("approvedHariIni").value) || 0;
+    let unsettle = parseFloat(document.getElementById("unsettle").value) || 0;
+
+    let hasil =
+        totalSaldo -
+        (
+            cutoff +
+            daylee +
+            approvedSemalam +
+            approvedHariIni +
+            unsettle
+        );
+
+    document.getElementById("hasil").innerText = formatRupiah(hasil);
+
+    document.getElementById("tbSaldo").innerText = formatRupiah(totalSaldo);
+    document.getElementById("tbCutoff").innerText = formatRupiah(cutoff);
+    document.getElementById("tbDaylee").innerText = formatRupiah(daylee);
+    document.getElementById("tbSemalam").innerText = formatRupiah(approvedSemalam);
+    document.getElementById("tbHariIni").innerText = formatRupiah(approvedHariIni);
+    document.getElementById("tbUnsettle").innerText = formatRupiah(unsettle);
+    document.getElementById("tbHasil").innerText = formatRupiah(hasil);
+
+}
+
+hitungSaldo();
+
 </script>
+
 </body>
 </html>
