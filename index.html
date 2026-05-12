@@ -1,325 +1,217 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+```html id="u7f2qm"
+<!-- FORMULA BAR -->
+<div class="formula-bar">
+  ✦ Saldo DOCT - (Cut Off + Daily Fee + Approved Kemarin + Approved Hari Ini + Unsettle) = Hasil Tambah Saldo Bank ✦
+</div>
 
-<title>DOCT Dashboard Calculator</title>
+<!-- INPUT GRID -->
+<div class="input-grid">
+  <div class="input-card">
+    <label class="card-label"><span class="card-icon">🌊</span>Cut Off</label>
+    <input class="card-input" id="cutoff" type="text" placeholder="0" autocomplete="off" />
+  </div>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <div class="input-card">
+    <label class="card-label"><span class="card-icon">🔥</span>Daily Fee</label>
+    <input class="card-input" id="dailyfee" type="text" placeholder="0" autocomplete="off" />
+  </div>
 
-<style>
+  <div class="input-card">
+    <label class="card-label"><span class="card-icon">⚔</span>Approved Kemarin</label>
+    <input class="card-input" id="appkemarin" type="text" placeholder="0" autocomplete="off" />
+  </div>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
+  <div class="input-card">
+    <label class="card-label"><span class="card-icon">🗡</span>Approved Hari Ini</label>
+    <input class="card-input" id="apphari" type="text" placeholder="0" autocomplete="off" />
+  </div>
 
-body{
-    background:#0f172a;
-    color:white;
-    padding:25px;
-}
+  <div class="input-card">
+    <label class="card-label"><span class="card-icon">💠</span>Unsettle</label>
+    <input class="card-input" id="unsettle" type="text" placeholder="0" autocomplete="off" />
+  </div>
 
-.dashboard{
-    max-width:1200px;
-    margin:auto;
-}
+  <div class="input-card blue">
+    <label class="card-label"><span class="card-icon">💎</span>Saldo DOCT</label>
+    <input class="card-input" id="saldo" type="text" placeholder="0" autocomplete="off" />
+  </div>
+</div>
 
-.header{
-    margin-bottom:25px;
-}
+<!-- TABEL SALDO DOCT -->
+<div class="result-card" style="margin-bottom:1.5rem;">
+  
+  <div class="result-label">
+    ⸻ Tabel Saldo DOCT ⸻
+  </div>
 
-.header h1{
-    font-size:32px;
-    font-weight:700;
-}
+  <div style="overflow-x:auto; margin-top:15px;">
 
-.header p{
-    color:#94a3b8;
-    margin-top:5px;
-}
+    <table style="width:100%; border-collapse:collapse; color:white; font-size:14px;">
 
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:20px;
-}
+      <thead>
+        <tr>
+          <th style="
+            padding:12px;
+            border-bottom:1px solid rgba(255,255,255,0.1);
+            text-align:left;
+            color:var(--neon-blue);
+          ">
+            Keterangan
+          </th>
 
-.card{
-    background:#1e293b;
-    border-radius:20px;
-    padding:25px;
-    box-shadow:0 0 15px rgba(0,0,0,0.3);
-}
+          <th style="
+            padding:12px;
+            border-bottom:1px solid rgba(255,255,255,0.1);
+            text-align:right;
+            color:var(--neon-blue);
+          ">
+            Nominal
+          </th>
+        </tr>
+      </thead>
 
-.card h2{
-    font-size:20px;
-    margin-bottom:20px;
-    color:#38bdf8;
-}
+      <tbody>
 
-.input-group{
-    margin-bottom:18px;
-}
+        <tr>
+          <td style="padding:10px;">💎 Saldo DOCT</td>
+          <td id="tbSaldo" style="padding:10px; text-align:right;">0</td>
+        </tr>
 
-.input-group label{
-    display:block;
-    margin-bottom:8px;
-    font-size:14px;
-    color:#cbd5e1;
-}
+        <tr>
+          <td style="padding:10px;">🌊 Cut Off</td>
+          <td id="tbCo" style="padding:10px; text-align:right;">0</td>
+        </tr>
 
-.input-group input{
-    width:100%;
-    padding:13px;
-    border:none;
-    border-radius:12px;
-    background:#334155;
-    color:white;
-    font-size:16px;
-}
+        <tr>
+          <td style="padding:10px;">🔥 Daily Fee</td>
+          <td id="tbDf" style="padding:10px; text-align:right;">0</td>
+        </tr>
 
-.input-group input:focus{
-    outline:none;
-    border:2px solid #38bdf8;
-}
+        <tr>
+          <td style="padding:10px;">⚔ Approved Kemarin</td>
+          <td id="tbAk" style="padding:10px; text-align:right;">0</td>
+        </tr>
 
-.result-box{
-    margin-top:20px;
-    padding:20px;
-    border-radius:15px;
-    background:#0f172a;
-    text-align:center;
-}
+        <tr>
+          <td style="padding:10px;">🗡 Approved Hari Ini</td>
+          <td id="tbAh" style="padding:10px; text-align:right;">0</td>
+        </tr>
 
-.result-box h3{
-    color:#94a3b8;
-    font-size:15px;
-    margin-bottom:10px;
-}
+        <tr>
+          <td style="padding:10px;">💠 Unsettle</td>
+          <td id="tbUn" style="padding:10px; text-align:right;">0</td>
+        </tr>
 
-.result{
-    font-size:30px;
-    font-weight:700;
-    color:#22c55e;
-}
+        <tr>
+          <td style="
+            padding:12px;
+            color:var(--neon-green);
+            font-weight:bold;
+          ">
+            💰 Hasil Tambah Saldo Bank
+          </td>
 
-.table-box{
-    overflow-x:auto;
-}
+          <td id="tbHasil" style="
+            padding:12px;
+            text-align:right;
+            color:var(--neon-green);
+            font-weight:bold;
+          ">
+            0
+          </td>
+        </tr>
 
-table{
-    width:100%;
-    border-collapse:collapse;
-}
+      </tbody>
 
-table th{
-    background:#0f172a;
-    padding:14px;
-    color:#38bdf8;
-}
+    </table>
 
-table td{
-    padding:14px;
-    border-bottom:1px solid #334155;
-}
+  </div>
+</div>
 
-.badge{
-    background:#22c55e;
-    color:white;
-    padding:5px 12px;
-    border-radius:20px;
-    font-size:12px;
-}
+<!-- RESULTS -->
+<div class="result-grid">
 
-@media(max-width:768px){
+  <div class="result-card">
 
-.header h1{
-    font-size:24px;
-}
-
-.result{
-    font-size:24px;
-}
-
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="dashboard">
-
-    <div class="header">
-        <h1>🔥 DOCT Dashboard Calculator</h1>
-        <p>Monitoring saldo & kalkulasi otomatis</p>
+    <div class="result-label">
+      ⸻ Hasil Tambah Saldo Bank ⸻
     </div>
 
-    <div class="grid">
-
-        <!-- CARD INPUT -->
-        <div class="card">
-
-            <h2>Kalkulasi Saldo DOCT</h2>
-
-            <div class="input-group">
-                <label>Total Saldo DOCT</label>
-                <input type="number" id="totalSaldo" value="0">
-            </div>
-
-            <div class="input-group">
-                <label>Cut Off</label>
-                <input type="number" id="cutoff" value="0">
-            </div>
-
-            <div class="input-group">
-                <label>Daylee Fee</label>
-                <input type="number" id="daylee" value="0">
-            </div>
-
-            <div class="input-group">
-                <label>Approved Tanggal Semalam</label>
-                <input type="number" id="approvedSemalam" value="0">
-            </div>
-
-            <div class="input-group">
-                <label>Approved Hari Ini</label>
-                <input type="number" id="approvedHariIni" value="0">
-            </div>
-
-            <div class="input-group">
-                <label>Unsettle</label>
-                <input type="number" id="unsettle" value="0">
-            </div>
-
-            <div class="result-box">
-                <h3>HASIL AKHIR</h3>
-                <div class="result" id="hasil">
-                    Rp 0
-                </div>
-            </div>
-
-        </div>
-
-        <!-- CARD TABLE -->
-        <div class="card">
-
-            <h2>Keterangan Saldo</h2>
-
-            <div class="table-box">
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>Keterangan</th>
-                            <th>Nominal</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        <tr>
-                            <td>Total Saldo DOCT</td>
-                            <td id="tbSaldo">Rp 0</td>
-                        </tr>
-
-                        <tr>
-                            <td>Cut Off</td>
-                            <td id="tbCutoff">Rp 0</td>
-                        </tr>
-
-                        <tr>
-                            <td>Daylee Fee</td>
-                            <td id="tbDaylee">Rp 0</td>
-                        </tr>
-
-                        <tr>
-                            <td>Approved Semalam</td>
-                            <td id="tbSemalam">Rp 0</td>
-                        </tr>
-
-                        <tr>
-                            <td>Approved Hari Ini</td>
-                            <td id="tbHariIni">Rp 0</td>
-                        </tr>
-
-                        <tr>
-                            <td>Unsettle</td>
-                            <td id="tbUnsettle">Rp 0</td>
-                        </tr>
-
-                        <tr>
-                            <td><strong>Hasil Akhir</strong></td>
-                            <td>
-                                <span class="badge" id="tbHasil">
-                                    Rp 0
-                                </span>
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
+    <div class="result-value" id="hasil">
+      —
     </div>
+
+    <div class="result-sub">
+      saldo doct dikurangi total pengeluaran
+    </div>
+
+  </div>
+
+  <div class="result-card selisih-card">
+
+    <div class="result-label">
+      ⸻ Status Saldo ⸻
+    </div>
+
+    <div class="result-value neutral" id="selisih">
+      —
+    </div>
+
+    <div class="result-sub">
+      hasil akhir kalkulasi
+    </div>
+
+  </div>
 
 </div>
 
 <script>
 
-const inputs = document.querySelectorAll("input");
+function hitung() {
 
-inputs.forEach(input => {
-    input.addEventListener("input", hitungSaldo);
-});
+  var co = parse(document.getElementById('cutoff').value);
+  var df = parse(document.getElementById('dailyfee').value);
+  var ak = parse(document.getElementById('appkemarin').value);
+  var ah = parse(document.getElementById('apphari').value);
+  var un = parse(document.getElementById('unsettle').value);
+  var sa = parse(document.getElementById('saldo').value);
 
-function formatRupiah(angka){
-    return "Rp " + Number(angka).toLocaleString("id-ID");
+  // RUMUS BARU
+  var hasil = sa - (co + df + ak + ah + un);
+
+  var hasilEl = document.getElementById('hasil');
+  var selisihEl = document.getElementById('selisih');
+
+  hasilEl.textContent = fmt(hasil);
+
+  // UPDATE TABLE
+  document.getElementById('tbSaldo').textContent = fmt(sa);
+  document.getElementById('tbCo').textContent = fmt(co);
+  document.getElementById('tbDf').textContent = fmt(df);
+  document.getElementById('tbAk').textContent = fmt(ak);
+  document.getElementById('tbAh').textContent = fmt(ah);
+  document.getElementById('tbUn').textContent = fmt(un);
+  document.getElementById('tbHasil').textContent = fmt(hasil);
+
+  // STATUS
+  if (hasil > 0) {
+
+    selisihEl.textContent = '+' + fmt(hasil);
+    selisihEl.className = 'result-value positive';
+
+  } else if (hasil < 0) {
+
+    selisihEl.textContent = fmt(hasil);
+    selisihEl.className = 'result-value negative';
+
+  } else {
+
+    selisihEl.textContent = fmt(hasil);
+    selisihEl.className = 'result-value neutral';
+
+  }
+
 }
-
-function hitungSaldo(){
-
-    let totalSaldo = parseFloat(document.getElementById("totalSaldo").value) || 0;
-    let cutoff = parseFloat(document.getElementById("cutoff").value) || 0;
-    let daylee = parseFloat(document.getElementById("daylee").value) || 0;
-    let approvedSemalam = parseFloat(document.getElementById("approvedSemalam").value) || 0;
-    let approvedHariIni = parseFloat(document.getElementById("approvedHariIni").value) || 0;
-    let unsettle = parseFloat(document.getElementById("unsettle").value) || 0;
-
-    let hasil =
-        totalSaldo -
-        (
-            cutoff +
-            daylee +
-            approvedSemalam +
-            approvedHariIni +
-            unsettle
-        );
-
-    document.getElementById("hasil").innerText = formatRupiah(hasil);
-
-    document.getElementById("tbSaldo").innerText = formatRupiah(totalSaldo);
-    document.getElementById("tbCutoff").innerText = formatRupiah(cutoff);
-    document.getElementById("tbDaylee").innerText = formatRupiah(daylee);
-    document.getElementById("tbSemalam").innerText = formatRupiah(approvedSemalam);
-    document.getElementById("tbHariIni").innerText = formatRupiah(approvedHariIni);
-    document.getElementById("tbUnsettle").innerText = formatRupiah(unsettle);
-    document.getElementById("tbHasil").innerText = formatRupiah(hasil);
-
-}
-
-hitungSaldo();
 
 </script>
-
-</body>
-</html>
+```
